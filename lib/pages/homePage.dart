@@ -20,38 +20,66 @@ class _HomePageState extends State<HomePage> {
     //初始情况下显示0界面
     initialPage: 0,
   );
+  _onScroll(offset) {
+    print(offset);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          // controller: _controller,
-          child: Column(
-        children: <Widget>[
-          //控制组件大小
-          Container(
-            //设置宽高
-            height: 166,
-            width: 221,
-            //轮播图组件
-            child: Swiper(
-              //设置轮播图片数量
-              itemCount: _imageUrls.length,
-              //自动播放
-              autoplay: true,
-              //每个banner（放置的图片，滚动位置）
-              itemBuilder: (BuildContext context, int index) {
-                return Image.network(
-                  _imageUrls[index],
-                  fit: BoxFit.fill,
-                );
-              },
-              //添加位置指示器
-              pagination: SwiperPagination(),
-            ),
-          )
-        ],
-      )),
+      //全屏
+      body: MediaQuery.removePadding(
+        //移除顶部
+        removeTop: true,
+        context: context,
+        //监听列表的滚动
+        child: NotificationListener(
+            onNotification: (scrollNotification) {
+              //监听列表是否更新
+              //监听深度1：子组件的变化也会触发，只取第一层子元素组件
+              if (scrollNotification is ScrollUpdateNotification &&
+                  scrollNotification.depth == 0) {
+                //滚动且是列表滚动的时候
+                _onScroll(scrollNotification.metrics.pixels);
+              }
+            },
+            child: ListView(
+              children: <Widget>[
+                //控制组件大小
+                Container(
+                  //设置宽高
+                  height: 166,
+                  width: 221,
+                  //轮播图组件
+                  child: Swiper(
+                    //设置轮播图片数量
+                    itemCount: _imageUrls.length,
+                    //自动播放
+                    autoplay: true,
+                    //滚动时间间隔
+                    autoplayDelay: 2000,
+                    //每个banner（放置的图片，滚动位置）
+                    itemBuilder: (BuildContext context, int index) {
+                      return Image.network(
+                        _imageUrls[index],
+                        fit: BoxFit.fill,
+                      );
+                    },
+                    //添加位置指示器
+                    pagination: SwiperPagination(),
+                  ),
+                ),
+                //控制组件大小
+                Container(
+                  //设置宽高
+                  height: 800,
+                  child: ListTile(
+                    title: Text("首页"),
+                  ),
+                )
+              ],
+            )),
+      ),
     );
   }
 }
