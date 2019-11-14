@@ -29,6 +29,13 @@ class _TabNavigatorState extends State<TabNavigator> {
       body: PageView(
         controller: _controller,
         children: <Widget>[HomePage(), SearchPage(), TravelPage(), MyPage()],
+        //页面滑动时更新底部barr
+        onPageChanged: (index) {
+          //改变选择的页面id
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
       //底部bar设置
       bottomNavigationBar: BottomNavigationBar(
