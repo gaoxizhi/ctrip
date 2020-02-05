@@ -13,7 +13,7 @@ class MyPage extends StatefulWidget {
 }
 
 Dio dio = new Dio();
-SomaTempVO _content = new SomaTempVO();
+SomaTempVO _content = new SomaTempVO(0.0, 0.0);
 Timer timer;
 Function notice;
 
@@ -55,9 +55,7 @@ class _MyPageState extends State<MyPage> {
         setState(() {});
       }
     };
-    _content.temp = 0;
-    _content.hum = 0;
-    _content.updateTime = DateTime(2020, 1, 1, 0, 0, 0);
+    _content.printPublic();
     print("initStateBegin:${new DateTime.now()}");
     timerTask();
     print("initStateEnd:${new DateTime.now()}");
