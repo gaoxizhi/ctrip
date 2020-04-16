@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-/**
- * 常量区
- */
+/// 常量区
 const APPBAR_SCROLL_OFFSET = 100;
 
 class HomePage extends StatefulWidget {
@@ -38,10 +36,10 @@ class _HomePageState extends State<HomePage> {
     } else if (alpha > 1) {
       alpha = 1;
     }
+    // 调整alpha通道，顶部透明度
     setState(() {
       appBarAlpha = alpha;
     });
-    print(appBarAlpha);
   }
 
   @override
@@ -98,7 +96,26 @@ class _HomePageState extends State<HomePage> {
                       child: ListTile(
                         title: Text("天下好走！"),
                       ),
-                    )
+                    ),
+                    // Expanded(
+                    //     child: TabBar(
+                    //   //多个按钮可以滑动
+                    //   isScrollable: true,
+                    //   indicatorColor: Colors.yellow,
+                    //   labelColor: Colors.yellow,
+                    //   unselectedLabelColor: Colors.white,
+                    //   //长度和字体保持一致
+                    //   indicatorSize: TabBarIndicatorSize.label,
+                    //   tabs: <Widget>[
+                    //     Tab(text: "火车票"),
+                    //     Tab(text: "汽车票"),
+                    //     Tab(text: "机票"),
+                    //     Tab(text: "船票"),
+                    //     Tab(text: "景点"),
+                    //     Tab(text: "乡村"),
+                    //     Tab(text: "民宿"),
+                    //   ],
+                    // ))
                   ],
                 )),
           ),

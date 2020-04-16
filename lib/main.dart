@@ -1,6 +1,5 @@
+import 'package:ctrip/pages/initPage.dart';
 import 'package:flutter/material.dart';
-
-import 'navigator/TabNavigator.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +15,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.lightBlue,
       ),
       //设置主页
-      home: TabNavigator(),
+      home: InitPage(),
+      //关闭debug显示
+      debugShowCheckedModeBanner: false,
     );
   }
 }
