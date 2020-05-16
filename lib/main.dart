@@ -1,6 +1,31 @@
+import 'package:ctrip/routers/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:logging/logging.dart';
+import 'package:stack_trace/stack_trace.dart';
 
-void main() => runApp(MyApp());
+// This is added to route the logging info - which includes which file and where in the file
+// the message came from.
+void initLogger() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    final List<Frame> frames = Trace.current().frames;
+    try {
+      final Frame f = frames.skip(0).firstWhere((Frame f) =>
+          f.library.toLowerCase().contains(rec.loggerName.toLowerCase()) &&
+          f != frames.first);
+      print(
+          '${rec.level.name}: ${f.member} (${rec.loggerName}:${f.line}): ${rec.message}');
+    } catch (e) {
+      print(e.toString());
+    }
+  });
+}
+
+void main() {
+  initLogger();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -13,56 +38,22 @@ class MyApp extends StatelessWidget {
         //主题颜色：亮蓝色
         primarySwatch: Colors.lightBlue,
       ),
-      //设置主页
-      home: MyHomePage(title: '去哪都行'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  //App首页标题
-  final String title;
-
-  //flutter中设置为私有方式，命名方式加下划线前缀
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      //国际化配置
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      //支持语言列表
+      supportedLocales: [
+        const Locale('zh', 'CH'),
+        const Locale('en', 'US'),
+      ],
+      //配置初始化加载的路由
+      initialRoute: '/',
+      //路由表
+      onGenerateRoute: onGenerateRoute,
+      //关闭debug显示
+      debugShowCheckedModeBanner: false,
     );
   }
 }
