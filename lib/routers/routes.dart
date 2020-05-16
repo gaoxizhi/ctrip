@@ -6,6 +6,10 @@ import 'package:ctrip/pages/routerPage/SecondPage.dart';
 import 'package:ctrip/pages/searchPage.dart';
 import 'package:ctrip/pages/travelPage.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+import 'package:ctrip/emq/mqtt_ui_page.dart';
+
+Logger log = Logger('mqtt_stream.dart');
 
 //路由表
 final Map routes = {
@@ -16,11 +20,13 @@ final Map routes = {
   "/myPage": (context) => MyPage(),
   "/second": (context) => SecondPage(),
   "/init": (context) => InitPage(),
+  "/mqtt": (context, {arguments}) => MqttPage(title: arguments),
 };
 //路由加载
 var onGenerateRoute = (settings) {
   //统一处理
   final String name = settings.name;
+  log.info('change to $name');
   final Function pageContentBuilder = routes[name];
   if (pageContentBuilder != null) {
     if (settings.arguments != null) {

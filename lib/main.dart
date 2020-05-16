@@ -1,8 +1,31 @@
 import 'package:ctrip/routers/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:logging/logging.dart';
+import 'package:stack_trace/stack_trace.dart';
 
-void main() => runApp(MyApp());
+// This is added to route the logging info - which includes which file and where in the file
+// the message came from.
+void initLogger() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    final List<Frame> frames = Trace.current().frames;
+    try {
+      final Frame f = frames.skip(0).firstWhere((Frame f) =>
+          f.library.toLowerCase().contains(rec.loggerName.toLowerCase()) &&
+          f != frames.first);
+      print(
+          '${rec.level.name}: ${f.member} (${rec.loggerName}:${f.line}): ${rec.message}');
+    } catch (e) {
+      print(e.toString());
+    }
+  });
+}
+
+void main() {
+  initLogger();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
